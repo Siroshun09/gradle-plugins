@@ -14,6 +14,9 @@
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 
+### Kotlin ###
+.kotlin
+
 ### IntelliJ IDEA ###
 .idea
 *.iml
