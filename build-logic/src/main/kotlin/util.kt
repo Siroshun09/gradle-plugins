@@ -7,8 +7,10 @@ fun GradlePluginDevelopmentExtension.setupPlugin(group: Any, id: String, descrip
     val className = id.split("-").joinToString("") { it.replaceFirstChar { c -> c.uppercaseChar() } } + "Plugin"
     plugins.register(id) {
         this.id = "$group.$id"
+        this.displayName = id
         this.description = description
         this.implementationClass = "$pkg.$className"
+        this.tags.set(listOf("utility"))
         website.set("https://github.com/Siroshun09/gradle-plugins")
         vcsUrl.set("https://github.com/Siroshun09/gradle-plugins.git")
         action.execute(this)
