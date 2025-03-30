@@ -34,6 +34,7 @@ fun AggregatedJavadocExtension.applyDefaults(project: Project) {
     name.set(project.name)
     version.set(project.version.toString())
     includes.set(emptyList())
+    excludes.set(emptyList())
     modules.set(emptyList())
     maxWarns.set(Int.MAX_VALUE)
 
