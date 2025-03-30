@@ -1,5 +1,9 @@
 # gradle-plugins
 
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/Siroshun09/gradle-plugins/gradle.yml)
+![License](https://img.shields.io/github/license/Siroshun09/gradle-plugins)
+
+
 A repository for managing Gradle shared build logic to setup projects.
 
 ## List of plugins
