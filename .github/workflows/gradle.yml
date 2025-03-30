@@ -1,0 +1,12 @@
+name: Java CI (Gradle)
+on: [ push, pull_request ]
+permissions:
+  checks: write
+
+jobs:
+  build-java-21:
+    uses: Siroshun09/gh-actions-workflows/.github/workflows/gradle.yml@v1
+    with:
+      java-version: '21'
+      upload-artifacts: false
+      upload-test-results: false
