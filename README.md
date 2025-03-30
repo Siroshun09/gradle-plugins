@@ -1,6 +1,6 @@
 # gradle-plugins
 
-A repository for managing shared build logics between my projects.
+A repository for managing Gradle shared build logic to setup projects.
 
 ## List of plugins
 
