@@ -15,6 +15,10 @@
  *
  */
 
+pluginManagement {
+    includeBuild("build-logic")
+}
+
 plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version ("0.9.0")
 }
@@ -24,7 +28,11 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "gradle-plugins"
 
 sequenceOf(
-    "common",
+    "aggregated-javadoc",
+    "aggregated-javadoc-collector",
+    "jcommon",
+    "maven-central-portal",
+    "maven-publication"
 ).forEach {
 val projectName = "${rootProject.name}-$it"
     include(projectName)

@@ -14,3 +14,8 @@
  *    limitations under the License.
  *
  */
+
+plugins {
+    `embedded-kotlin` apply false
+    `kotlin-dsl` apply false
+}
