@@ -44,7 +44,9 @@ abstract class UploadToMavenCentralPortal : DefaultTask() {
         }
 
         if (connection.responseCode in 200..299) {
-            error("Upload failed with response code: ${connection.responseCode}, msg: ${connection.responseMessage}, body: ${connection.inputStream.bufferedReader().readText()}")
+            logger.info("Successfully uploaded ${bundledZipFile.get().asFile.toPath().fileName} to Maven Central Portal!")
+        } else {
+            logger.error("Upload failed with response code: ${connection.responseCode}, msg: ${connection.responseMessage}, body: ${connection.inputStream.bufferedReader().readText()}")
         }
     }
 }
