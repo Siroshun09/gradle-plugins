@@ -34,6 +34,11 @@ abstract class MavenCentralPortalPlugin : Plugin<Project> {
                     extension.bundledZipFile.get().asFile.delete()
                 }
 
+                val zipParentDir = extension.bundledZipFile.get().asFile.parentFile
+                if (!zipParentDir.exists()) {
+                    zipParentDir.mkdirs()
+                }
+
                 val stagingPath = extension.stagingDirectory.get().asFile.toPath()
                 java.util.zip.ZipOutputStream(extension.bundledZipFile.get().asFile.outputStream()).use { zipOut ->
                     extension.stagingDirectory.get().asFile.walk().forEach { file ->
