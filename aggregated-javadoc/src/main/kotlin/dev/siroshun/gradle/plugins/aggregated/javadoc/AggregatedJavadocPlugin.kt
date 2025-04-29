@@ -37,7 +37,11 @@ abstract class AggregatedJavadocPlugin : Plugin<Project> {
                     .links(*aggregatingSettings.links.toTypedArray())
 
                 opts.addStringOption("Xmaxwarns", extension.maxWarns.toString())
-                opts.addStringOption("-add-modules", extension.modules.get().joinToString(","))
+
+                val modules = extension.modules.get().joinToString(",")
+                if (modules.isNotEmpty()) {
+                    opts.addStringOption("-add-modules", modules)
+                }
 
                 if (extension.javadocOptionsAction.isPresent) {
                     extension.javadocOptionsAction.get().execute(opts)
