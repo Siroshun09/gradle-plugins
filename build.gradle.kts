@@ -23,5 +23,4 @@ plugins {
 
 mavenCentralPortal {
     stagingDirectory = rootProject.layout.buildDirectory.dir("staging-$version")
-    bundledZipFile = rootProject.layout.buildDirectory.file("bundled-$version.zip")
 }

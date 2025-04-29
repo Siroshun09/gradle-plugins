@@ -1,6 +1,6 @@
 [versions]
 # plugins
-gradle-plugins = "1.0.0"
+gradle-plugins = "1.0.1"
 
 [plugins]
 
