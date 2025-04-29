@@ -18,4 +18,10 @@
 plugins {
     `embedded-kotlin` apply false
     `kotlin-dsl` apply false
+    alias(libs.plugins.mavenCentralPortal)
+}
+
+mavenCentralPortal {
+    stagingDirectory = rootProject.layout.buildDirectory.dir("staging-$version")
+    bundledZipFile = rootProject.layout.buildDirectory.file("bundled-$version.zip")
 }

@@ -1,0 +1,7 @@
+[versions]
+# plugins
+gradle-plugins = "1.0.0"
+
+[plugins]
+
+mavenCentralPortal = { id = "dev.siroshun.gradle.plugins.maven-central-portal", version.ref = "gradle-plugins" }
