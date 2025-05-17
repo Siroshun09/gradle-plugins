@@ -10,7 +10,9 @@ import org.gradle.api.plugins.JavaLibraryPlugin
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Delete
+import org.gradle.api.tasks.bundling.Jar
 import org.gradle.api.tasks.compile.JavaCompile
+import org.gradle.api.tasks.javadoc.Javadoc
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.jvm.toolchain.JavaLanguageVersion
@@ -94,6 +96,18 @@ abstract class JCommonPlugin : Plugin<Project> {
 
         if (extension.commonDependenciesAction.isPresent) {
             extension.commonDependenciesAction.get().execute(CommonDependencies(target.dependencies))
+        }
+
+        if (extension.jarTaskConfigurationAction.isPresent) {
+            target.tasks.withType<Jar> {
+                extension.jarTaskConfigurationAction.get().execute(this)
+            }
+        }
+
+        if (extension.javadocTaskConfigurationAction.isPresent) {
+            target.tasks.withType<Javadoc> {
+                extension.javadocTaskConfigurationAction.get().execute(this)
+            }
         }
 
         if (extension.mockitoProvider.isPresent) {

@@ -7,6 +7,8 @@ import org.gradle.api.artifacts.MinimalExternalModuleDependency
 import org.gradle.api.artifacts.dsl.RepositoryHandler
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
+import org.gradle.api.tasks.bundling.Jar
+import org.gradle.api.tasks.javadoc.Javadoc
 import org.gradle.kotlin.dsl.maven
 import java.nio.charset.Charset
 
@@ -17,6 +19,8 @@ interface JCommonExtension {
 
     val commonRepositoriesAction: Property<Action<RepositoryHandler>>
     val commonDependenciesAction: Property<Action<CommonDependencies>>
+    val jarTaskConfigurationAction: Property<Action<Jar>>
+    val javadocTaskConfigurationAction: Property<Action<Javadoc>>
 
     val mockitoProvider: Property<Provider<MinimalExternalModuleDependency>>
 
@@ -44,7 +48,31 @@ interface JCommonExtension {
         }
     }
 
-    fun setupMockito(mockito: Provider<MinimalExternalModuleDependency>){
+    fun jarTask(action: Action<Jar>) {
+        if (jarTaskConfigurationAction.isPresent) {
+            val current = jarTaskConfigurationAction.get()
+            jarTaskConfigurationAction.set {
+                current.execute(this)
+                action.execute(this)
+            }
+        } else {
+            jarTaskConfigurationAction.set(action)
+        }
+    }
+
+    fun javadocTask(action: Action<Javadoc>) {
+        if (javadocTaskConfigurationAction.isPresent) {
+            val current = javadocTaskConfigurationAction.get()
+            javadocTaskConfigurationAction.set {
+                current.execute(this)
+                action.execute(this)
+            }
+        } else {
+            javadocTaskConfigurationAction.set(action)
+        }
+    }
+
+    fun setupMockito(mockito: Provider<MinimalExternalModuleDependency>) {
         mockitoProvider.set(mockito)
         commonDependencies {
             testImplementation(mockito)
