@@ -7,6 +7,7 @@ import org.gradle.api.artifacts.MinimalExternalModuleDependency
 import org.gradle.api.artifacts.dsl.RepositoryHandler
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
+import org.gradle.kotlin.dsl.maven
 import java.nio.charset.Charset
 
 interface JCommonExtension {
@@ -47,6 +48,21 @@ interface JCommonExtension {
         mockitoProvider.set(mockito)
         commonDependencies {
             testImplementation(mockito)
+        }
+    }
+
+    fun setupPaperRepository() {
+        commonRepositories {
+            maven("https://repo.papermc.io/repository/maven-public/") {
+                name = "PaperMC"
+                mavenContent {
+                    includeGroupAndSubgroups("io.papermc")
+                    includeGroupAndSubgroups("com.destroystokyo.paper")
+                    includeGroupAndSubgroups("com.velocitypowered")
+                    includeGroupAndSubgroups("net.md-5")
+                    includeGroupAndSubgroups("com.mojang")
+                }
+            }
         }
     }
 }
