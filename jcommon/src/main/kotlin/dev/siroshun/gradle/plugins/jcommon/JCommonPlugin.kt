@@ -86,10 +86,10 @@ abstract class JCommonPlugin : Plugin<Project> {
             }
         }
 
+        target.repositories.mavenCentral()
+
         if (extension.commonRepositoriesAction.isPresent) {
             extension.commonRepositoriesAction.get().execute(target.repositories)
-        } else {
-            target.repositories.mavenCentral()
         }
 
         if (extension.commonDependenciesAction.isPresent) {
