@@ -3,8 +3,10 @@ package dev.siroshun.gradle.plugins.jcommon
 import dev.siroshun.gradle.plugins.jcommon.dependency.CommonDependencies
 import org.gradle.api.Action
 import org.gradle.api.JavaVersion
+import org.gradle.api.artifacts.MinimalExternalModuleDependency
 import org.gradle.api.artifacts.dsl.RepositoryHandler
 import org.gradle.api.provider.Property
+import org.gradle.api.provider.Provider
 import java.nio.charset.Charset
 
 interface JCommonExtension {
@@ -14,6 +16,8 @@ interface JCommonExtension {
 
     val commonRepositoriesAction: Property<Action<RepositoryHandler>>
     val commonDependenciesAction: Property<Action<CommonDependencies>>
+
+    val mockitoProvider: Property<Provider<MinimalExternalModuleDependency>>
 
     fun commonRepositories(action: Action<RepositoryHandler>) {
         if (commonRepositoriesAction.isPresent) {
@@ -36,6 +40,13 @@ interface JCommonExtension {
             }
         } else {
             commonDependenciesAction.set(action)
+        }
+    }
+
+    fun setupMockito(mockito: Provider<MinimalExternalModuleDependency>){
+        mockitoProvider.set(mockito)
+        commonDependencies {
+            testImplementation(mockito)
         }
     }
 }

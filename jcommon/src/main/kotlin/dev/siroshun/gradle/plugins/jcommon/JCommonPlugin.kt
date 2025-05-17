@@ -3,9 +3,12 @@ package dev.siroshun.gradle.plugins.jcommon
 import dev.siroshun.gradle.plugins.jcommon.dependency.CommonDependencies
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.artifacts.Configuration
+import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.plugins.BasePlugin
 import org.gradle.api.plugins.JavaLibraryPlugin
 import org.gradle.api.plugins.JavaPluginExtension
+import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.api.tasks.testing.Test
@@ -13,9 +16,11 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
+import org.gradle.kotlin.dsl.newInstance
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
 import org.gradle.language.jvm.tasks.ProcessResources
+import org.gradle.process.CommandLineArgumentProvider
 
 const val JCOMMON_EXTENSION_NAME = "jcommon"
 
@@ -41,15 +46,18 @@ abstract class JCommonPlugin : Plugin<Project> {
         targets.forEach {
             it.plugins.apply(JavaLibraryPlugin::class.java)
 
+            val mockitoAgent = it.configurations.create("mockitoAgent")
+
             it.afterEvaluate {
-                runAfterEvaluate(it, extension)
+                runAfterEvaluate(it, extension, mockitoAgent)
             }
         }
     }
 
     private fun runAfterEvaluate(
         target: Project,
-        extension: JCommonExtension
+        extension: JCommonExtension,
+        mockitoAgent: Configuration
     ) {
         target.extensions.configure<JavaPluginExtension> {
             sourceCompatibility = extension.javaVersion.get()
@@ -87,5 +95,29 @@ abstract class JCommonPlugin : Plugin<Project> {
         if (extension.commonDependenciesAction.isPresent) {
             extension.commonDependenciesAction.get().execute(CommonDependencies(target.dependencies))
         }
+
+        if (extension.mockitoProvider.isPresent) {
+            val mockito = extension.mockitoProvider.get().get().copy()
+            mockito.isTransitive = false
+            mockitoAgent.dependencies.add(mockito)
+            mockitoAgent.resolve()
+            target.tasks.withType<Test>().configureEach {
+                dependsOn(mockitoAgent)
+                jvmArgumentProviders.add(
+                    project.objects.newInstance<JavaAgentArgumentProvider>().apply {
+                        classpath.from(mockitoAgent.asPath)
+                    }
+                )
+            }
+        }
+    }
+
+    abstract class JavaAgentArgumentProvider : CommandLineArgumentProvider {
+
+        @get:Classpath
+        abstract val classpath: ConfigurableFileCollection
+
+        override fun asArguments() = listOf("-javaagent:${classpath.singleFile.absolutePath}")
+
     }
 }
