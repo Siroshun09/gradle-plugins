@@ -33,7 +33,7 @@ abstract class AggregatedJavadocCollectorPlugin : Plugin<Project> {
             }
 
             target.rootProject.tasks.named<Javadoc>(AGGREGATE_JAVADOC_TASK_NAME) {
-                subprojects.mapNotNull { it.tasks.findByName(JavaPlugin.CLASSES_TASK_NAME) }.forEach { dependsOn(it) }
+                dependsOn(target.tasks.getByName(JavaPlugin.CLASSES_TASK_NAME))
                 source(javadocTask.source)
                 (classpath as ConfigurableFileCollection).from(javadocClasspath)
             }
