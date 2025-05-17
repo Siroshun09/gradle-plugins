@@ -1,10 +1,12 @@
 package dev.siroshun.gradle.plugins.jcommon.dependency
 
 import groovy.lang.Closure
+import org.gradle.api.Action
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.artifacts.ExternalModuleDependency
 import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.plugins.JavaPlugin
+import org.gradle.kotlin.dsl.accessors.runtime.addDependencyTo
 
 class CommonDependencies(delegate: DependencyHandler) : DependencyHandler by delegate {
 
@@ -16,12 +18,20 @@ class CommonDependencies(delegate: DependencyHandler) : DependencyHandler by del
         add(JavaPlugin.COMPILE_ONLY_CONFIGURATION_NAME, dependencyNotation, closure)
     }
 
+    fun CommonDependencies.compileOnly(dependencyNotation: Any, action: Action<ExternalModuleDependency>) {
+        addDependencyTo(this, JavaPlugin.COMPILE_ONLY_CONFIGURATION_NAME, dependencyNotation, action)
+    }
+
     fun CommonDependencies.compileOnlyApi(dependencyNotation: Any): Dependency? {
         return add(JavaPlugin.COMPILE_ONLY_API_CONFIGURATION_NAME, dependencyNotation)
     }
 
     fun CommonDependencies.compileOnlyApi(dependencyNotation: Any, closure: Closure<ExternalModuleDependency>) {
         add(JavaPlugin.COMPILE_ONLY_API_CONFIGURATION_NAME, dependencyNotation, closure)
+    }
+
+    fun CommonDependencies.compileOnlyApi(dependencyNotation: Any, action: Action<ExternalModuleDependency>) {
+        addDependencyTo(this, JavaPlugin.COMPILE_ONLY_API_CONFIGURATION_NAME, dependencyNotation, action)
     }
 
     fun CommonDependencies.api(dependencyNotation: Any): Dependency? {
@@ -32,12 +42,20 @@ class CommonDependencies(delegate: DependencyHandler) : DependencyHandler by del
         add(JavaPlugin.API_CONFIGURATION_NAME, dependencyNotation, closure)
     }
 
+    fun CommonDependencies.api(dependencyNotation: Any, action: Action<ExternalModuleDependency>) {
+        addDependencyTo(this, JavaPlugin.API_CONFIGURATION_NAME, dependencyNotation, action)
+    }
+
     fun CommonDependencies.implementation(dependencyNotation: Any): Dependency? {
         return add(JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAME, dependencyNotation)
     }
 
     fun CommonDependencies.implementation(dependencyNotation: Any, closure: Closure<ExternalModuleDependency>) {
         add(JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAME, dependencyNotation, closure)
+    }
+
+    fun CommonDependencies.implementation(dependencyNotation: Any, action: Action<ExternalModuleDependency>) {
+        addDependencyTo(this, JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAME, dependencyNotation, action)
     }
 
     fun CommonDependencies.runtimeOnly(dependencyNotation: Any): Dependency? {
@@ -48,12 +66,20 @@ class CommonDependencies(delegate: DependencyHandler) : DependencyHandler by del
         add(JavaPlugin.RUNTIME_ONLY_CONFIGURATION_NAME, dependencyNotation, closure)
     }
 
+    fun CommonDependencies.runtimeOnly(dependencyNotation: Any, action: Action<ExternalModuleDependency>) {
+        addDependencyTo(this, JavaPlugin.RUNTIME_ONLY_CONFIGURATION_NAME, dependencyNotation, action)
+    }
+
     fun CommonDependencies.testCompileOnly(dependencyNotation: Any): Dependency? {
         return add(JavaPlugin.TEST_COMPILE_ONLY_CONFIGURATION_NAME, dependencyNotation)
     }
 
     fun CommonDependencies.testCompileOnly(dependencyNotation: Any, closure: Closure<ExternalModuleDependency>) {
         add(JavaPlugin.TEST_COMPILE_ONLY_CONFIGURATION_NAME, dependencyNotation, closure)
+    }
+
+    fun CommonDependencies.testCompileOnly(dependencyNotation: Any, action: Action<ExternalModuleDependency>) {
+        addDependencyTo(this, JavaPlugin.TEST_COMPILE_ONLY_CONFIGURATION_NAME, dependencyNotation, action)
     }
 
     fun CommonDependencies.testImplementation(dependencyNotation: Any): Dependency? {
@@ -64,11 +90,19 @@ class CommonDependencies(delegate: DependencyHandler) : DependencyHandler by del
         add(JavaPlugin.TEST_IMPLEMENTATION_CONFIGURATION_NAME, dependencyNotation, closure)
     }
 
+    fun CommonDependencies.testImplementation(dependencyNotation: Any, action: Action<ExternalModuleDependency>) {
+        addDependencyTo(this, JavaPlugin.TEST_IMPLEMENTATION_CONFIGURATION_NAME, dependencyNotation, action)
+    }
+
     fun CommonDependencies.testRuntimeOnly(dependencyNotation: Any): Dependency? {
         return add(JavaPlugin.TEST_RUNTIME_ONLY_CONFIGURATION_NAME, dependencyNotation)
     }
 
     fun CommonDependencies.testRuntimeOnly(dependencyNotation: Any, closure: Closure<ExternalModuleDependency>) {
         add(JavaPlugin.TEST_RUNTIME_ONLY_CONFIGURATION_NAME, dependencyNotation, closure)
+    }
+
+    fun CommonDependencies.testRuntimeOnly(dependencyNotation: Any, action: Action<ExternalModuleDependency>) {
+        addDependencyTo(this, JavaPlugin.TEST_RUNTIME_ONLY_CONFIGURATION_NAME, dependencyNotation, action)
     }
 }
