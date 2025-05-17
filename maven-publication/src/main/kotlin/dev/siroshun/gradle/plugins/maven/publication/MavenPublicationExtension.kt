@@ -5,6 +5,7 @@ import org.gradle.api.artifacts.dsl.RepositoryHandler
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.publish.maven.MavenPom
+import java.io.File
 
 interface MavenPublicationExtension {
     val repositoriesAction: Property<Action<RepositoryHandler>>
@@ -18,6 +19,14 @@ interface MavenPublicationExtension {
         repositories {
             maven {
                 url = dir.get().asFile.toURI()
+            }
+        }
+    }
+
+    fun localRepository(dir: File) {
+        repositories {
+            maven {
+                url = dir.toURI()
             }
         }
     }
