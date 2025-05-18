@@ -100,3 +100,20 @@ fun JCommonExtension.applyDefaults() {
     charset.set(Charsets.UTF_8)
     disableTestConfiguration.set(false)
 }
+
+fun mergeExtensionProperties(parent : JCommonExtension, child : JCommonExtension) {
+    mergeExtensionProperty(parent.javaVersion, child.javaVersion)
+    mergeExtensionProperty(parent.charset, child.charset)
+    mergeExtensionProperty(parent.disableTestConfiguration, child.disableTestConfiguration)
+    mergeExtensionProperty(parent.mockitoProvider, child.mockitoProvider)
+    mergeExtensionProperty(parent.commonRepositoriesAction, child.commonRepositoriesAction)
+    mergeExtensionProperty(parent.commonDependenciesAction, child.commonDependenciesAction)
+    mergeExtensionProperty(parent.jarTaskConfigurationAction, child.jarTaskConfigurationAction)
+    mergeExtensionProperty(parent.javadocTaskConfigurationAction, child.javadocTaskConfigurationAction)
+}
+
+fun <T> mergeExtensionProperty(ref: Property<T>, target: Property<T>) {
+    if (ref.isPresent && !target.isPresent) {
+        target.set(ref.get())
+    }
+}

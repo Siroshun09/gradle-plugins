@@ -47,11 +47,18 @@ abstract class JCommonPlugin : Plugin<Project> {
 
         targets.forEach {
             it.plugins.apply(JavaLibraryPlugin::class.java)
-
             val mockitoAgent = it.configurations.create("mockitoAgent")
 
-            it.afterEvaluate {
-                runAfterEvaluate(it, extension, mockitoAgent)
+            if (target == it) {
+                it.afterEvaluate {
+                    runAfterEvaluate(it, extension, mockitoAgent)
+                }
+            } else {
+                val subExtension = it.extensions.create<JCommonExtension>(JCOMMON_EXTENSION_NAME)
+                it.afterEvaluate {
+                    mergeExtensionProperties(extension, subExtension)
+                    runAfterEvaluate(it, subExtension, mockitoAgent)
+                }
             }
         }
     }
