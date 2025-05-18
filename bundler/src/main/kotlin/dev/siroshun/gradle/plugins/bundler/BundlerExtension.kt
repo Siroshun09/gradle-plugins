@@ -7,7 +7,7 @@ import org.gradle.language.jvm.tasks.ProcessResources
 
 interface BundlerExtension {
 
-    val processResourceAction: Property<Action<ProcessResources>>
+    val processResourcesAction: Property<Action<ProcessResources>>
     val jarNameInRootBuildDirectory: Property<String>
 
     fun copyToRootBuildDirectory(filename: String) {
@@ -15,14 +15,14 @@ interface BundlerExtension {
     }
 
     fun processResources(action: Action<ProcessResources>) {
-        if (processResourceAction.isPresent) {
-            val current = processResourceAction.get()
-            processResourceAction.set {
+        if (processResourcesAction.isPresent) {
+            val current = processResourcesAction.get()
+            processResourcesAction.set {
                 current.execute(this)
                 action.execute(this)
             }
         } else {
-            processResourceAction.set(action)
+            processResourcesAction.set(action)
         }
     }
 
