@@ -9,6 +9,7 @@ import org.gradle.api.plugins.BasePlugin
 import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.api.plugins.JavaLibraryPlugin
 import org.gradle.kotlin.dsl.withType
+import org.gradle.language.jvm.tasks.ProcessResources
 
 abstract class BundlerPlugin : Plugin<Project> {
 
@@ -41,6 +42,14 @@ abstract class BundlerPlugin : Plugin<Project> {
         target.tasks.named(BasePlugin.CLEAN_TASK_NAME).configure {
             doLast {
                 createArtifactFilepath(target, extension)?.asFile?.delete()
+            }
+        }
+
+        target.afterEvaluate {
+            if (extension.processResourcesAction.isPresent) {
+                target.tasks.withType<ProcessResources>().configureEach {
+                    extension.processResourcesAction.get().execute(this)
+                }
             }
         }
     }
