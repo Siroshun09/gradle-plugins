@@ -30,6 +30,7 @@ rootProject.name = "gradle-plugins"
 sequenceOf(
     "aggregated-javadoc",
     "aggregated-javadoc-collector",
+    "bundler",
     "jcommon",
     "maven-central-portal",
     "maven-publication"
