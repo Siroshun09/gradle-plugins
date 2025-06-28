@@ -75,10 +75,15 @@ abstract class MavenCentralPortalPlugin : Plugin<Project> {
         }
 
         targets.forEach {
-            it.tasks.whenTaskAdded {
-                if (name == PublishingPlugin.PUBLISH_LIFECYCLE_TASK_NAME) {
-                    zipTask.get().dependsOn(this)
+            val publishTask = it.tasks.findByName(PublishingPlugin.PUBLISH_LIFECYCLE_TASK_NAME)
+            if (publishTask == null) {
+                it.tasks.whenTaskAdded {
+                    if (name == PublishingPlugin.PUBLISH_LIFECYCLE_TASK_NAME) {
+                        zipTask.get().dependsOn(this)
+                    }
                 }
+            } else {
+                zipTask.get().dependsOn(publishTask)
             }
         }
 
