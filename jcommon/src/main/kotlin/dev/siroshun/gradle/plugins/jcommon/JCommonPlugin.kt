@@ -9,7 +9,6 @@ import org.gradle.api.plugins.BasePlugin
 import org.gradle.api.plugins.JavaLibraryPlugin
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.Classpath
-import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.api.tasks.javadoc.Javadoc
@@ -19,7 +18,6 @@ import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.newInstance
-import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
 import org.gradle.language.jvm.tasks.ProcessResources
 import org.gradle.process.CommandLineArgumentProvider
@@ -31,13 +29,6 @@ abstract class JCommonPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         val extension = target.extensions.create<JCommonExtension>(JCOMMON_EXTENSION_NAME)
         extension.applyDefaults()
-
-        target.tasks.register<Delete>(BasePlugin.CLEAN_TASK_NAME).configure {
-            group = BasePlugin.BUILD_GROUP
-            doLast {
-                target.layout.buildDirectory.get().asFile.deleteRecursively()
-            }
-        }
 
         val targets = if (target.subprojects.isEmpty()) {
             setOf(target)
@@ -59,6 +50,13 @@ abstract class JCommonPlugin : Plugin<Project> {
                     mergeExtensionProperties(extension, subExtension)
                     runAfterEvaluate(it, subExtension, mockitoAgent)
                 }
+            }
+        }
+
+        target.tasks.findByName(BasePlugin.CLEAN_TASK_NAME) ?: target.tasks.register(BasePlugin.CLEAN_TASK_NAME).configure {
+            group = BasePlugin.BUILD_GROUP
+            doLast {
+                target.layout.buildDirectory.get().asFile.deleteRecursively()
             }
         }
     }
