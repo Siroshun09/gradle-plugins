@@ -68,7 +68,13 @@ abstract class MavenCentralPortalPlugin : Plugin<Project> {
             }
         }
 
-        target.subprojects.forEach {
+        val targets = if (target.subprojects.isEmpty()) {
+            setOf(target)
+        } else {
+            target.subprojects
+        }
+
+        targets.forEach {
             it.tasks.whenTaskAdded {
                 if (name == PublishingPlugin.PUBLISH_LIFECYCLE_TASK_NAME) {
                     zipTask.get().dependsOn(this)
