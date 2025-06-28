@@ -14,8 +14,13 @@ import org.gradle.language.jvm.tasks.ProcessResources
 abstract class BundlerPlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
-        target.plugins.apply(JavaLibraryPlugin::class.java)
-        target.plugins.apply(ShadowPlugin::class.java)
+        if (!target.plugins.hasPlugin(JavaLibraryPlugin::class.java)) {
+            target.plugins.apply(JavaLibraryPlugin::class.java)
+        }
+
+        if (!target.plugins.hasPlugin(ShadowPlugin::class.java)) {
+            target.plugins.apply(ShadowPlugin::class.java)
+        }
 
         val extension = target.extensions.create("bundler", BundlerExtension::class.java)
 
