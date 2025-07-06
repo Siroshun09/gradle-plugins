@@ -17,8 +17,10 @@ abstract class MavenCentralPortalPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         val extension = target.extensions.create(MAVEN_CENTRAL_PORTAL_EXTENSION_NAME, MavenCentralPortalExtension::class.java)
 
-        extension.stagingDirectory.set(target.layout.buildDirectory.dir("$MAVEN_CENTRAL_PORTAL_DIRECTORY_NAME/staging-${target.version}"))
-        extension.bundledZipFile.set(target.layout.buildDirectory.file("$MAVEN_CENTRAL_PORTAL_DIRECTORY_NAME/${target.name}-${target.version}.zip"))
+        val version = target.version.toString()
+        extension.stagingDirectory.set(target.layout.buildDirectory.dir("$MAVEN_CENTRAL_PORTAL_DIRECTORY_NAME/staging-$version"))
+        extension.bundledZipFile.set(target.layout.buildDirectory.file("$MAVEN_CENTRAL_PORTAL_DIRECTORY_NAME/${target.name}-$version.zip"))
+        val isSnapshot = version.endsWith("SNAPSHOT")
 
         val cleanupTask = target.tasks.register<Delete>(CLEAN_STAGING_TASK_NAME) {
             extension.stagingDirectory.get().asFile.deleteRecursively()
@@ -59,7 +61,7 @@ abstract class MavenCentralPortalPlugin : Plugin<Project> {
             group = PublishingPlugin.PUBLISH_TASK_GROUP
             this@register.bundledZipFile.set(extension.bundledZipFile)
             doLast {
-                if (project.version.toString().endsWith("SNAPSHOT") && !extension.publishSnapshot.orElse(false).get()) {
+                if (isSnapshot && !extension.publishSnapshot.orElse(false).get()) {
                     error(
                         "Trying to upload snapshot version to Maven Central Portal.\n"
                             .plus("If you want to upload snapshot, set publishSnapshot = true")
