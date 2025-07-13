@@ -60,7 +60,7 @@ abstract class MavenCentralPortalPlugin : Plugin<Project> {
         ) {
             group = PublishingPlugin.PUBLISH_TASK_GROUP
             this@register.bundledZipFile.set(extension.bundledZipFile)
-            doLast {
+            doFirst {
                 if (isSnapshot && !extension.publishSnapshot.orElse(false).get()) {
                     error(
                         "Trying to upload snapshot version to Maven Central Portal.\n"
