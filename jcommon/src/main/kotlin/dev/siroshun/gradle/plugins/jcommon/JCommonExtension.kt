@@ -101,15 +101,27 @@ fun JCommonExtension.applyDefaults() {
     disableTestConfiguration.set(false)
 }
 
-fun mergeExtensionProperties(parent : JCommonExtension, child : JCommonExtension) {
+fun mergeExtensionProperties(parent: JCommonExtension, child: JCommonExtension) {
     mergeExtensionProperty(parent.javaVersion, child.javaVersion)
     mergeExtensionProperty(parent.charset, child.charset)
     mergeExtensionProperty(parent.disableTestConfiguration, child.disableTestConfiguration)
     mergeExtensionProperty(parent.mockitoProvider, child.mockitoProvider)
-    mergeExtensionProperty(parent.commonRepositoriesAction, child.commonRepositoriesAction)
-    mergeExtensionProperty(parent.commonDependenciesAction, child.commonDependenciesAction)
-    mergeExtensionProperty(parent.jarTaskConfigurationAction, child.jarTaskConfigurationAction)
-    mergeExtensionProperty(parent.javadocTaskConfigurationAction, child.javadocTaskConfigurationAction)
+
+    if (parent.commonRepositoriesAction.isPresent) {
+        child.commonRepositories(parent.commonRepositoriesAction.get())
+    }
+
+    if (parent.commonDependenciesAction.isPresent) {
+        child.commonDependencies(parent.commonDependenciesAction.get())
+    }
+
+    if (parent.jarTaskConfigurationAction.isPresent) {
+        child.jarTask(parent.jarTaskConfigurationAction.get())
+    }
+
+    if (parent.javadocTaskConfigurationAction.isPresent) {
+        child.javadocTask(parent.javadocTaskConfigurationAction.get())
+    }
 }
 
 fun <T> mergeExtensionProperty(ref: Property<T>, target: Property<T>) {
