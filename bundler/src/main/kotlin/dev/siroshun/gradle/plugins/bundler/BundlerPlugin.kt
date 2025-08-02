@@ -27,22 +27,25 @@ abstract class BundlerPlugin : Plugin<Project> {
         val libsDir = target.rootProject.layout.buildDirectory.dir("libs")
         val extension = target.extensions.create("bundler", BundlerExtension::class.java)
 
-        val shadowTask = target.tasks.withType<ShadowJar>()
-        if (shadowTask.isEmpty()) {
+        val shadowTasks = target.tasks.withType<ShadowJar>()
+        if (shadowTasks.isEmpty()) {
             target.logger.error("BundlerPlugin: No shadow task found.")
             return
         }
 
-        if (shadowTask.size > 1) {
+        if (shadowTasks.size > 1) {
             target.logger.error("BundlerPlugin: Multiple shadow task found.")
             return
         }
 
+        val shadowTask = shadowTasks.first()
+        val archiveFile = shadowTask.archiveFile
+
         target.tasks.named(JavaBasePlugin.BUILD_TASK_NAME).configure {
-            dependsOn(shadowTask.first())
+            dependsOn(shadowTask)
             doLast {
                 createArtifactFilepath(libsDir, extension)?.let { file ->
-                    shadowTask.first().archiveFile.get().asFile.copyTo(file.asFile, true)
+                    archiveFile.get().asFile.copyTo(file.asFile, true)
                 }
             }
         }
