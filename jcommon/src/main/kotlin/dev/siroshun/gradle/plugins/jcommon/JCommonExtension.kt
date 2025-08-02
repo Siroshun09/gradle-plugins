@@ -124,7 +124,7 @@ fun mergeExtensionProperties(parent: JCommonExtension, child: JCommonExtension) 
     }
 }
 
-fun <T> mergeExtensionProperty(ref: Property<T>, target: Property<T>) {
+fun <T : Any> mergeExtensionProperty(ref: Property<T>, target: Property<T>) {
     if (ref.isPresent && !target.isPresent) {
         target.set(ref.get())
     }
