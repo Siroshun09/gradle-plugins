@@ -4,10 +4,12 @@ import com.github.jengelman.gradle.plugins.shadow.ShadowPlugin
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.file.Directory
 import org.gradle.api.file.RegularFile
 import org.gradle.api.plugins.BasePlugin
 import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.api.plugins.JavaLibraryPlugin
+import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.withType
 import org.gradle.language.jvm.tasks.ProcessResources
 
@@ -22,6 +24,7 @@ abstract class BundlerPlugin : Plugin<Project> {
             target.plugins.apply(ShadowPlugin::class.java)
         }
 
+        val libsDir = target.rootProject.layout.buildDirectory.dir("libs")
         val extension = target.extensions.create("bundler", BundlerExtension::class.java)
 
         val shadowTask = target.tasks.withType<ShadowJar>()
@@ -38,7 +41,7 @@ abstract class BundlerPlugin : Plugin<Project> {
         target.tasks.named(JavaBasePlugin.BUILD_TASK_NAME).configure {
             dependsOn(shadowTask.first())
             doLast {
-                createArtifactFilepath(target, extension)?.let { file ->
+                createArtifactFilepath(libsDir, extension)?.let { file ->
                     shadowTask.first().archiveFile.get().asFile.copyTo(file.asFile, true)
                 }
             }
@@ -46,7 +49,7 @@ abstract class BundlerPlugin : Plugin<Project> {
 
         target.tasks.named(BasePlugin.CLEAN_TASK_NAME).configure {
             doLast {
-                createArtifactFilepath(target, extension)?.asFile?.delete()
+                createArtifactFilepath(libsDir, extension)?.asFile?.delete()
             }
         }
 
@@ -59,7 +62,7 @@ abstract class BundlerPlugin : Plugin<Project> {
         }
     }
 
-    fun createArtifactFilepath(project: Project, extension: BundlerExtension): RegularFile? {
+    fun createArtifactFilepath(libsDir: Provider<Directory>, extension: BundlerExtension): RegularFile? {
         if (!extension.jarNameInRootBuildDirectory.isPresent) {
             return null
         }
@@ -73,6 +76,6 @@ abstract class BundlerPlugin : Plugin<Project> {
             jarName += ".jar"
         }
 
-        return project.rootProject.layout.buildDirectory.dir("libs").get().file(jarName)
+        return libsDir.get().file(jarName)
     }
 }
