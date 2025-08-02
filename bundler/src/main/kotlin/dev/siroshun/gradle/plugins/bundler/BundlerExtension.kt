@@ -34,12 +34,31 @@ interface BundlerExtension {
         }
     }
 
+    fun replacePluginVersion(filename: String, version: Any, minecraftVersion: Any) {
+        processResources {
+            filesMatching(listOf(filename)) {
+                expand(
+                    "projectVersion" to version,
+                    "minecraftVersion" to minecraftVersion,
+                )
+            }
+        }
+    }
+
     fun replacePluginVersionForBukkit(version: Any) {
         replacePluginVersion("plugin.yml", version)
     }
 
+    fun replacePluginVersionForBukkit(version: Any, minecraftVersion: Any) {
+        replacePluginVersion("plugin.yml", version, minecraftVersion)
+    }
+
     fun replacePluginVersionForPaper(version: Any) {
         replacePluginVersion("paper-plugin.yml", version)
+    }
+
+    fun replacePluginVersionForPaper(version: Any, minecraftVersion: Any) {
+        replacePluginVersion("paper-plugin.yml", version, minecraftVersion)
     }
 
     fun replacePluginVersionForVelocity(version: Any) {
