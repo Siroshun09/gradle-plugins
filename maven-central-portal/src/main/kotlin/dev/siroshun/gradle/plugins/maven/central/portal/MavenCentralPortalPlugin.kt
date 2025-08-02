@@ -60,6 +60,10 @@ abstract class MavenCentralPortalPlugin : Plugin<Project> {
         ) {
             group = PublishingPlugin.PUBLISH_TASK_GROUP
             this@register.bundledZipFile.set(extension.bundledZipFile)
+
+            credentials.username = project.property("mavenCentralPortal.username") as String?
+            credentials.password = project.property("mavenCentralPortal.password") as String?
+
             doFirst {
                 if (isSnapshot && !extension.publishSnapshot.orElse(false).get()) {
                     error(

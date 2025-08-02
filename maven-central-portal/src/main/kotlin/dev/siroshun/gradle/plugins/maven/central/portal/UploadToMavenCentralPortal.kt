@@ -1,24 +1,30 @@
 package dev.siroshun.gradle.plugins.maven.central.portal
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.credentials.PasswordCredentials
 import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.model.ObjectFactory
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.TaskAction
 import java.io.DataOutputStream
 import java.net.HttpURLConnection
 import java.net.URI
 import java.util.*
+import javax.inject.Inject
 
-abstract class UploadToMavenCentralPortal : DefaultTask() {
+abstract class UploadToMavenCentralPortal @Inject constructor(
+    objects: ObjectFactory
+) : DefaultTask() {
 
     @get:InputFile
     abstract val bundledZipFile: RegularFileProperty
+    @get:Input
+    val credentials: PasswordCredentials = objects.newInstance(PasswordCredentials::class.java)
 
     @TaskAction
     fun run() {
-        val username = project.property("mavenCentralPortal.username")
-        val password = project.property("mavenCentralPortal.password")
-        val token = Base64.getEncoder().encodeToString("$username:$password".toByteArray())
+        val token = Base64.getEncoder().encodeToString("${credentials.username}:${credentials.password}".toByteArray())
         val authorizationHeader = "Bearer $token"
 
         val uploadUrl = "https://central.sonatype.com/api/v1/publisher/upload"
