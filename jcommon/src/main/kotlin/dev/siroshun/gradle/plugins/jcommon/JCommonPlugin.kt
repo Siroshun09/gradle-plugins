@@ -53,10 +53,12 @@ abstract class JCommonPlugin : Plugin<Project> {
             }
         }
 
+        val buildDir = target.layout.buildDirectory
+
         target.tasks.findByName(BasePlugin.CLEAN_TASK_NAME) ?: target.tasks.register(BasePlugin.CLEAN_TASK_NAME).configure {
             group = BasePlugin.BUILD_GROUP
             doLast {
-                target.layout.buildDirectory.get().asFile.deleteRecursively()
+                buildDir.get().asFile.deleteRecursively()
             }
         }
     }
