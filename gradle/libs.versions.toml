@@ -1,6 +1,6 @@
 [versions]
 # plugins
-shadow = "9.0.0"
+shadow = "9.0.1"
 gradle-plugins = "1.5.0"
 
 [libraries]
