@@ -27,7 +27,7 @@ repositories {
 dependencies {
     implementation("org.gradle.kotlin.embedded-kotlin:org.gradle.kotlin.embedded-kotlin.gradle.plugin:6.4.0")
     implementation("org.gradle.kotlin.kotlin-dsl:org.gradle.kotlin.kotlin-dsl.gradle.plugin:6.2.0")
-    implementation("com.gradle.plugin-publish:com.gradle.plugin-publish.gradle.plugin:1.3.1")
+    implementation("com.gradle.plugin-publish:com.gradle.plugin-publish.gradle.plugin:2.0.0")
 }
 
 val javaVersion = JavaVersion.VERSION_21
