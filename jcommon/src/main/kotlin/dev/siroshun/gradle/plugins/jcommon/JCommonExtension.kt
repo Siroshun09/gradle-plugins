@@ -72,6 +72,13 @@ interface JCommonExtension {
         }
     }
 
+    fun setupJUnit(junitBom: Provider<MinimalExternalModuleDependency>) {
+        commonDependencies {
+            testImplementation(platform(junitBom))
+            testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+        }
+    }
+
     fun setupMockito(mockito: Provider<MinimalExternalModuleDependency>) {
         mockitoProvider.set(mockito)
         commonDependencies {
