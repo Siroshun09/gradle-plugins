@@ -3,7 +3,11 @@ plugins {
 }
 
 gradlePlugin {
-    setupPlugin(project.group, "bundler", "Siro's Gradle shared build logic, for bundling dependencies into a single jar.")
+    setupPlugin(
+        project.group,
+        "bundler",
+        "Siro's Gradle shared build logic, for bundling dependencies into a single jar."
+    )
 }
 
 dependencies {

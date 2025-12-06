@@ -8,7 +8,7 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.javadoc.Javadoc
 import org.gradle.external.javadoc.StandardJavadocDocletOptions
 
-abstract class AggregateJavadocTask: Javadoc() {
+abstract class AggregateJavadocTask : Javadoc() {
 
     @get:Input
     abstract val docTitle: Property<String>

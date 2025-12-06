@@ -35,7 +35,7 @@ sequenceOf(
     "maven-central-portal",
     "maven-publication"
 ).forEach {
-val projectName = "${rootProject.name}-$it"
+    val projectName = "${rootProject.name}-$it"
     include(projectName)
     project(":$projectName").projectDir = file(it)
 }

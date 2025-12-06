@@ -15,7 +15,10 @@ const val UPLOAD_TO_MAVEN_CENTRAL_PORTAL_TASK_NAME = "uploadToMavenCentralPortal
 abstract class MavenCentralPortalPlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
-        val extension = target.extensions.create(MAVEN_CENTRAL_PORTAL_EXTENSION_NAME, MavenCentralPortalExtension::class.java)
+        val extension = target.extensions.create(
+            MAVEN_CENTRAL_PORTAL_EXTENSION_NAME,
+            MavenCentralPortalExtension::class.java
+        )
 
         val version = target.version.toString()
         extension.stagingDirectory.set(target.layout.buildDirectory.dir("$MAVEN_CENTRAL_PORTAL_DIRECTORY_NAME/staging-$version"))

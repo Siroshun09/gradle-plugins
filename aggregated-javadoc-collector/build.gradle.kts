@@ -3,7 +3,11 @@ plugins {
 }
 
 gradlePlugin {
-    setupPlugin(project.group, "aggregated-javadoc-collector", "Siro's Gradle shared build logic, for collecting Javadoc tasks to aggregate.")
+    setupPlugin(
+        project.group,
+        "aggregated-javadoc-collector",
+        "Siro's Gradle shared build logic, for collecting Javadoc tasks to aggregate."
+    )
 }
 
 dependencies {

@@ -91,7 +91,10 @@ class CommonDependencies(delegate: DependencyHandler) : DependencyHandler by del
         add(JavaPlugin.TEST_IMPLEMENTATION_CONFIGURATION_NAME, dependencyNotation, closure)
     }
 
-    fun CommonDependencies.testImplementation(dependencyNotation: Provider<*>, action: Action<ExternalModuleDependency>) {
+    fun CommonDependencies.testImplementation(
+        dependencyNotation: Provider<*>,
+        action: Action<ExternalModuleDependency>
+    ) {
         addConfiguredDependencyTo(this, JavaPlugin.TEST_IMPLEMENTATION_CONFIGURATION_NAME, dependencyNotation, action)
     }
 

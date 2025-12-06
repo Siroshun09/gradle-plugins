@@ -19,6 +19,7 @@ abstract class UploadToMavenCentralPortal @Inject constructor(
 
     @get:InputFile
     abstract val bundledZipFile: RegularFileProperty
+
     @get:Input
     val credentials: PasswordCredentials = objects.newInstance(PasswordCredentials::class.java)
 
@@ -52,7 +53,12 @@ abstract class UploadToMavenCentralPortal @Inject constructor(
         if (connection.responseCode in 200..299) {
             logger.info("Successfully uploaded ${bundledZipFile.get().asFile.toPath().fileName} to Maven Central Portal!")
         } else {
-            logger.error("Upload failed with response code: ${connection.responseCode}, msg: ${connection.responseMessage}, body: ${connection.inputStream.bufferedReader().readText()}")
+            logger.error(
+                "Upload failed with response code: " +
+                    "${connection.responseCode}, " +
+                    "msg: ${connection.responseMessage}, " +
+                    "body: ${connection.inputStream.bufferedReader().readText()}"
+            )
         }
     }
 }
