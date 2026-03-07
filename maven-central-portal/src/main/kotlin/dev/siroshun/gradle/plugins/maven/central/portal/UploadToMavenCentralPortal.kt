@@ -7,12 +7,14 @@ import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.TaskAction
+import org.gradle.work.DisableCachingByDefault
 import java.io.DataOutputStream
 import java.net.HttpURLConnection
 import java.net.URI
 import java.util.*
 import javax.inject.Inject
 
+@DisableCachingByDefault
 abstract class UploadToMavenCentralPortal @Inject constructor(
     objects: ObjectFactory
 ) : DefaultTask() {
