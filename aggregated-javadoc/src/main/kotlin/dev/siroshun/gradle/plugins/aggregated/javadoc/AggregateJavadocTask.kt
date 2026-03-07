@@ -2,12 +2,14 @@ package dev.siroshun.gradle.plugins.aggregated.javadoc
 
 import org.gradle.api.Action
 import org.gradle.api.provider.Property
+import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.javadoc.Javadoc
 import org.gradle.external.javadoc.StandardJavadocDocletOptions
 
+@CacheableTask
 abstract class AggregateJavadocTask : Javadoc() {
 
     @get:Input
