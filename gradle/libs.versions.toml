@@ -1,7 +1,7 @@
 [versions]
 # plugins
 shadow = "9.3.2"
-gradle-plugins = "1.6.1"
+gradle-plugins = "1.7.0"
 
 [libraries]
 
