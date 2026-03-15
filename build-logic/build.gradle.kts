@@ -25,8 +25,8 @@ repositories {
 }
 
 dependencies {
-    implementation("org.gradle.kotlin.embedded-kotlin:org.gradle.kotlin.embedded-kotlin.gradle.plugin:6.5.4")
-    implementation("org.gradle.kotlin.kotlin-dsl:org.gradle.kotlin.kotlin-dsl.gradle.plugin:6.5.4")
+    implementation("org.gradle.kotlin.embedded-kotlin:org.gradle.kotlin.embedded-kotlin.gradle.plugin:6.5.5")
+    implementation("org.gradle.kotlin.kotlin-dsl:org.gradle.kotlin.kotlin-dsl.gradle.plugin:6.5.5")
     implementation("com.gradle.plugin-publish:com.gradle.plugin-publish.gradle.plugin:2.1.0")
 }
 
