@@ -20,7 +20,7 @@ abstract class AggregatedJavadocCollectorPlugin : Plugin<Project> {
             val javadocTask = target.tasks.withType<Javadoc>()[JavaPlugin.JAVADOC_TASK_NAME]
 
             val javadocTaskSource = javadocTask.source
-            val javadocTaskClasspath = javadocTask.classpath
+            val javadocTaskClasspath = javadocTask.classpath.files
             val javadocTaskIncludes = javadocTask.includes
             val javadocTaskExcludes = javadocTask.excludes
             val options = javadocTask.options as StandardJavadocDocletOptions
