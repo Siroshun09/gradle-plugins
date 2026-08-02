@@ -93,6 +93,7 @@ abstract class JCommonPlugin : Plugin<Project> {
                 testLogging {
                     events(TestLogEvent.FAILED, TestLogEvent.SKIPPED)
                 }
+                systemProperty("java.io.tmpdir", temporaryDir.absolutePath)
             }
         }
 
