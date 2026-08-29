@@ -97,6 +97,7 @@ interface JCommonExtension {
                     includeGroupAndSubgroups("net.md-5")
                     includeGroupAndSubgroups("com.mojang")
                     includeModule("ca.spottedleaf", "concurrentutil")
+                    includeModule("ca.spottedleaf", "leafpile")
                 }
             }
         }
