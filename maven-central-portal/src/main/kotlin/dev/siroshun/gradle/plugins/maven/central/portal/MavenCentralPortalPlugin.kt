@@ -66,6 +66,7 @@ abstract class MavenCentralPortalPlugin : Plugin<Project> {
 
             credentials.username = project.findProperty("mavenCentralPortal.username") as String?
             credentials.password = project.findProperty("mavenCentralPortal.password") as String?
+            publishingType.set(project.findProperty("mavenCentralPortal.publishingType") as String?)
 
             doFirst {
                 if (isSnapshot && !extension.publishSnapshot.orElse(false).get()) {
