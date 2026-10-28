@@ -1,11 +1,14 @@
 package dev.siroshun.gradle.plugins.maven.central.portal
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.GradleException
 import org.gradle.api.credentials.PasswordCredentials
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
+import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
@@ -25,6 +28,13 @@ abstract class UploadToMavenCentralPortal @Inject constructor(
     @get:PathSensitive(PathSensitivity.ABSOLUTE)
     abstract val bundledZipFile: RegularFileProperty
 
+    /**
+     * `AUTOMATIC` or `USER_MANAGED`. The Portal uses `USER_MANAGED` if not set.
+     */
+    @get:Input
+    @get:Optional
+    abstract val publishingType: Property<String>
+
     @get:Input
     val credentials: PasswordCredentials = objects.newInstance(PasswordCredentials::class.java)
 
@@ -33,7 +43,8 @@ abstract class UploadToMavenCentralPortal @Inject constructor(
         val token = Base64.getEncoder().encodeToString("${credentials.username}:${credentials.password}".toByteArray())
         val authorizationHeader = "Bearer $token"
 
-        val uploadUrl = "https://central.sonatype.com/api/v1/publisher/upload"
+        val uploadUrl = "https://central.sonatype.com/api/v1/publisher/upload" +
+            (publishingType.orNull?.let { "?publishingType=$it" } ?: "")
         val boundary = "----WebKitFormBoundary${UUID.randomUUID()}"
         val connection = URI(uploadUrl).toURL().openConnection() as HttpURLConnection
         connection.requestMethod = "POST"
@@ -56,13 +67,14 @@ abstract class UploadToMavenCentralPortal @Inject constructor(
         }
 
         if (connection.responseCode in 200..299) {
-            logger.info("Successfully uploaded ${bundledZipFile.get().asFile.toPath().fileName} to Maven Central Portal!")
+            val deploymentId = connection.inputStream.bufferedReader().readText()
+            logger.lifecycle("Uploaded ${bundledZipFile.get().asFile.toPath().fileName} to Maven Central Portal (deployment: $deploymentId)")
         } else {
-            logger.error(
+            throw GradleException(
                 "Upload failed with response code: " +
                     "${connection.responseCode}, " +
                     "msg: ${connection.responseMessage}, " +
-                    "body: ${connection.inputStream.bufferedReader().readText()}"
+                    "body: ${connection.errorStream?.bufferedReader()?.readText()}"
             )
         }
     }
